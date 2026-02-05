@@ -1,12 +1,13 @@
 # Agent Skills Repository
 
-This repository contains my global *Skills* and *Workflows* for AI agents (Antigravity, OpenCode, Gemini).
+This repository contains my global *Skills* and *Workflows* for AI agents (Antigravity, OpenCode, Gemini, Cursor).
 
 ## Structure
 
 *   `agent/`: Configuration for Antigravity (`.agent`).
 *   `opencode/`: Configuration for OpenCode (`.opencode`).
-*   `gemini/`: Configuration for Gemini Agents (`.gemini`), including `GEMINI.md` (System Prompt) and `settings.json`.
+*   `gemini/`: Configuration for Gemini Agents (`.gemini`).
+*   `cursor/`: Configuration template for Cursor (`.cursorrules`).
 
 ## Installation
 
@@ -22,6 +23,15 @@ Clone this repository and run the installation script appropriate for your opera
 chmod +x install.sh
 ./install.sh
 ```
+
+## How to use in Cursor
+
+Unlike Antigravity or OpenCode, Cursor primarily uses a `.cursorrules` file in the project root.
+1. Run the installation script.
+2. Copy the `.cursorrules` file from `~/.cursor-skills/.cursorrules` to your project root.
+3. You can now use "virtual commands" in Cursor Chat or Composer:
+   - Type `/review` to trigger a DDD code review.
+   - Type `/commit` to trigger the Smart Commit flow.
 
 ## Maintenance
 

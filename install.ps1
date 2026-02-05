@@ -13,21 +13,29 @@ if (Test-Path "$RepoRoot\.git") {
 }
 
 # 2. Sync folders to Home
-$Folders = @("agent", "opencode", "gemini")
+$Folders = @("agent", "opencode", "gemini", "cursor")
 
 foreach ($folder in $Folders) {
     $src = "$RepoRoot\$folder"
-    $dest = "$UserHome\.$folder"
+    # For .cursor we might want to keep the name or map to .cursor-skills
+    $destName = if ($folder -eq "cursor") { "cursor-skills" } else { ".$folder" }
+    $dest = "$UserHome\$destName"
     
     if (Test-Path $src) {
-        Write-Host "Syncing .$folder to user home..." -ForegroundColor Cyan
+        Write-Host "Syncing $folder config to $dest..." -ForegroundColor Cyan
         if (-not (Test-Path $dest)) {
             New-Item -ItemType Directory -Path $dest -Force | Out-Null
         }
-        # Copy-Item with -Force is idempotent and overwrites existing files
-        Copy-Item -Path "$src\*" -Destination $dest -Recurse -Force
+        
+        if ($folder -eq "cursor") {
+            # Copy contents of cursor/ to .cursor-skills/
+            Copy-Item -Path "$src\*" -Destination $dest -Recurse -Force
+        }
+        else {
+            Copy-Item -Path "$src\*" -Destination $dest -Recurse -Force
+        }
     }
 }
 
 Write-Host "`nSuccess! Your global AI skills are updated and in sync." -ForegroundColor Green
-Write-Host "Note: If you are using Antigravity, you might need to refresh the UI."
+Write-Host "Note: For Cursor, copy .cursorrules from ~/.cursor-skills to your project root."

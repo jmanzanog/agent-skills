@@ -14,19 +14,23 @@ if [ -d "$REPO_ROOT/.git" ]; then
 fi
 
 # 2. Sync folders to Home
-FOLDERS=("agent" "opencode" "gemini")
+FOLDERS=("agent" "opencode" "gemini" "cursor")
 
 for folder in "${FOLDERS[@]}"; do
     SRC="$REPO_ROOT/$folder"
-    DEST="$USER_HOME/.$folder"
+    
+    if [ "$folder" == "cursor" ]; then
+        DEST="$USER_HOME/.cursor-skills"
+    else
+        DEST="$USER_HOME/.$folder"
+    fi
     
     if [ -d "$SRC" ]; then
-        echo -e "\033[0;36mSyncing .$folder to user home...\033[0m"
+        echo -e "\033[0;36mSyncing $folder config to $DEST...\033[0m"
         mkdir -p "$DEST"
-        # Overwrite existing files
         cp -R "$SRC/"* "$DEST/"
     fi
 done
 
 echo -e "\n\033[0;32mSuccess! Your global AI skills are updated and in sync.\033[0m"
-echo "Note: If you are using Antigravity, you might need to refresh the UI."
+echo "Note: For Cursor, copy .cursorrules from ~/.cursor-skills to your project root."
