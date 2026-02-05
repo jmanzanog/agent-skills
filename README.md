@@ -1,15 +1,15 @@
 # Agent Skills Repository
 
-Este repositorio contiene mis *Skills* y *Workflows* globales para agentes de IA (Antigravity, OpenCode).
+This repository contains my global *Skills* and *Workflows* for AI agents (Antigravity, OpenCode).
 
-## Estructura
+## Structure
 
-*   `agent/`: Configuración para Antigravity (`.agent`).
-*   `opencode/`: Configuración para OpenCode (`.opencode`).
+*   `agent/`: Configuration for Antigravity (`.agent`).
+*   `opencode/`: Configuration for OpenCode (`.opencode`).
 
-## Instalación
+## Installation
 
-Clona este repositorio y ejecuta el script de instalación correspondiente a tu sistema operativo. Esto copiará las configuraciones a tu directorio `$HOME`.
+Clone this repository and run the installation script appropriate for your operating system. This will copy the configurations to your `$HOME` directory.
 
 ### Windows (PowerShell)
 ```powershell
@@ -22,8 +22,8 @@ chmod +x install.sh
 ./install.sh
 ```
 
-## Mantenimiento
+## Maintenance
 
-1.  Edita los skills en este repositorio.
-2.  Haz commit y push a GitHub.
-3.  Vuelve a ejecutar `install` para aplicar los cambios a tu entorno local.
+1.  Edit the skills in this repository.
+2.  Commit and push to GitHub.
+3.  Run the `install` script again to apply changes to your local environment.
