@@ -12,38 +12,31 @@ if (Test-Path "$RepoRoot\.git") {
     git pull origin main
 }
 
-# 2. Sync folders to Home
-$FoldersMapping = @{
-    "agent"    = ".$folder"
-    "opencode" = ".$folder"
-    "gemini"   = ".$folder"
-    "cursor"   = "" # Special handling below
-}
-
-# Folders to iterate
+# 2. Sync Folders
 $Folders = @("agent", "opencode", "gemini", "cursor")
 
 foreach ($folder in $Folders) {
     if ($folder -eq "cursor") {
-        # 2.1 Sync Cursor Rules Template
+        # 2.1 Sync Cursor Commands (Global)
+        $srcCommands = "$RepoRoot\cursor\commands"
+        $destCommands = "$UserHome\.cursor\commands"
+        if (Test-Path $srcCommands) {
+            Write-Host "Syncing Global Cursor Commands..." -ForegroundColor Cyan
+            New-Item -ItemType Directory -Force -Path $destCommands | Out-Null
+            Copy-Item -Path "$srcCommands\*" -Destination $destCommands -Recurse -Force
+        }
+
+        # 2.2 Sync Cursor Rules Template (Manual Copy if needed)
         $srcRules = "$RepoRoot\cursor\.cursorrules"
         $destRulesDir = "$UserHome\.cursor-skills"
         if (Test-Path $srcRules) {
-            Write-Host "Syncing CursorRules template to $destRulesDir..." -ForegroundColor Cyan
+            Write-Host "Syncing .cursorrules template to ~/.cursor-skills..." -ForegroundColor Cyan
             New-Item -ItemType Directory -Force -Path $destRulesDir | Out-Null
             Copy-Item -Path $srcRules -Destination $destRulesDir -Force
         }
-
-        # 2.2 Sync Cursor Native Skills
-        $srcSkills = "$RepoRoot\cursor\skills-cursor"
-        $destSkills = "$UserHome\.cursor\skills-cursor"
-        if (Test-Path $srcSkills) {
-            Write-Host "Syncing Cursor Native Skills to $destSkills..." -ForegroundColor Cyan
-            New-Item -ItemType Directory -Force -Path $destSkills | Out-Null
-            Copy-Item -Path "$srcSkills\*" -Destination $destSkills -Recurse -Force
-        }
     }
     else {
+        # Standard .folder sync
         $src = "$RepoRoot\$folder"
         $dest = "$UserHome\.$folder"
         if (Test-Path $src) {
@@ -55,5 +48,4 @@ foreach ($folder in $Folders) {
 }
 
 Write-Host "`nSuccess! Your global AI skills are updated and in sync." -ForegroundColor Green
-Write-Host "Note: For Cursor, you can now use /code-review and /smart-commit in Chat."
-Write-Host "Note 2: You can also copy .cursorrules from ~/.cursor-skills to your project root."
+Write-Host "Note: For Cursor, you can now use /review and /commit in Chat globally."
