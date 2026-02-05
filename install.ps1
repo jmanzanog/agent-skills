@@ -1,37 +1,33 @@
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
 
 $RepoRoot = $PSScriptRoot
 $UserHome = $HOME
 
-Write-Host "Installing Agent Skills from: $RepoRoot"
-Write-Host "Target: $UserHome"
+Write-Host "--- Agent Skills Sync ---" -ForegroundColor Yellow
 
-# 1. Install .agent
-$AgentSrc = "$RepoRoot\agent"
-$AgentDest = "$UserHome\.agent"
-if (Test-Path $AgentSrc) {
-    Write-Host "Syncing .agent..." -ForegroundColor Cyan
-    New-Item -ItemType Directory -Force -Path $AgentDest | Out-Null
-    Copy-Item -Path "$AgentSrc\*" -Destination $AgentDest -Recurse -Force
+# 1. Update from GitHub if possible
+if (Test-Path "$RepoRoot\.git") {
+    Write-Host "Checking for updates in repository..." -ForegroundColor Cyan
+    Set-Location $RepoRoot
+    git pull origin main
 }
 
-# 2. Install .opencode
-$OpenCodeSrc = "$RepoRoot\opencode"
-$OpenCodeDest = "$UserHome\.opencode"
-if (Test-Path $OpenCodeSrc) {
-    Write-Host "Syncing .opencode..." -ForegroundColor Cyan
-    New-Item -ItemType Directory -Force -Path $OpenCodeDest | Out-Null
-    Copy-Item -Path "$OpenCodeSrc\*" -Destination $OpenCodeDest -Recurse -Force
+# 2. Sync folders to Home
+$Folders = @("agent", "opencode", "gemini")
+
+foreach ($folder in $Folders) {
+    $src = "$RepoRoot\$folder"
+    $dest = "$UserHome\.$folder"
+    
+    if (Test-Path $src) {
+        Write-Host "Syncing .$folder to user home..." -ForegroundColor Cyan
+        if (-not (Test-Path $dest)) {
+            New-Item -ItemType Directory -Path $dest -Force | Out-Null
+        }
+        # Copy-Item with -Force is idempotent and overwrites existing files
+        Copy-Item -Path "$src\*" -Destination $dest -Recurse -Force
+    }
 }
 
-# 3. Install .gemini
-$GeminiSrc = "$RepoRoot\gemini"
-$GeminiDest = "$UserHome\.gemini"
-if (Test-Path $GeminiSrc) {
-    Write-Host "Syncing .gemini..." -ForegroundColor Cyan
-    New-Item -ItemType Directory -Force -Path $GeminiDest | Out-Null
-    Copy-Item -Path "$GeminiSrc\*" -Destination $GeminiDest -Recurse -Force
-}
-
-Write-Host "Installation Complete! Skills are now available globally." -ForegroundColor Green
-Write-Host "Restart your IDE/Agent to pick up changes."
+Write-Host "`nSuccess! Your global AI skills are updated and in sync." -ForegroundColor Green
+Write-Host "Note: If you are using Antigravity, you might need to refresh the UI."

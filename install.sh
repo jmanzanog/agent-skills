@@ -4,35 +4,29 @@ set -e
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 USER_HOME="$HOME"
 
-echo "Installing Agent Skills from: $REPO_ROOT"
-echo "Target: $USER_HOME"
+echo -e "\033[1;33m--- Agent Skills Sync ---\033[0m"
 
-# 1. Install .agent
-AGENT_SRC="$REPO_ROOT/agent"
-AGENT_DEST="$USER_HOME/.agent"
-if [ -d "$AGENT_SRC" ]; then
-    echo "Syncing .agent..."
-    mkdir -p "$AGENT_DEST"
-    cp -R "$AGENT_SRC/"* "$AGENT_DEST/"
+# 1. Update from GitHub if possible
+if [ -d "$REPO_ROOT/.git" ]; then
+    echo -e "\033[0;36mChecking for updates in repository...\033[0m"
+    cd "$REPO_ROOT"
+    git pull origin main
 fi
 
-# 2. Install .opencode
-OPENCODE_SRC="$REPO_ROOT/opencode"
-OPENCODE_DEST="$USER_HOME/.opencode"
-if [ -d "$OPENCODE_SRC" ]; then
-    echo "Syncing .opencode..."
-    mkdir -p "$OPENCODE_DEST"
-    cp -R "$OPENCODE_SRC/"* "$OPENCODE_DEST/"
-fi
+# 2. Sync folders to Home
+FOLDERS=("agent" "opencode" "gemini")
 
-# 3. Install .gemini
-GEMINI_SRC="$REPO_ROOT/gemini"
-GEMINI_DEST="$USER_HOME/.gemini"
-if [ -d "$GEMINI_SRC" ]; then
-    echo "Syncing .gemini..."
-    mkdir -p "$GEMINI_DEST"
-    cp -R "$GEMINI_SRC/"* "$GEMINI_DEST/"
-fi
+for folder in "${FOLDERS[@]}"; do
+    SRC="$REPO_ROOT/$folder"
+    DEST="$USER_HOME/.$folder"
+    
+    if [ -d "$SRC" ]; then
+        echo -e "\033[0;36mSyncing .$folder to user home...\033[0m"
+        mkdir -p "$DEST"
+        # Overwrite existing files
+        cp -R "$SRC/"* "$DEST/"
+    fi
+done
 
-echo "Installation Complete! Skills are now available globally."
-echo "Restart your IDE/Agent to pick up changes."
+echo -e "\n\033[0;32mSuccess! Your global AI skills are updated and in sync.\033[0m"
+echo "Note: If you are using Antigravity, you might need to refresh the UI."
