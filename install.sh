@@ -25,5 +25,14 @@ if [ -d "$OPENCODE_SRC" ]; then
     cp -R "$OPENCODE_SRC/"* "$OPENCODE_DEST/"
 fi
 
+# 3. Install .gemini
+GEMINI_SRC="$REPO_ROOT/gemini"
+GEMINI_DEST="$USER_HOME/.gemini"
+if [ -d "$GEMINI_SRC" ]; then
+    echo "Syncing .gemini..."
+    mkdir -p "$GEMINI_DEST"
+    cp -R "$GEMINI_SRC/"* "$GEMINI_DEST/"
+fi
+
 echo "Installation Complete! Skills are now available globally."
 echo "Restart your IDE/Agent to pick up changes."

@@ -24,5 +24,14 @@ if (Test-Path $OpenCodeSrc) {
     Copy-Item -Path "$OpenCodeSrc\*" -Destination $OpenCodeDest -Recurse -Force
 }
 
+# 3. Install .gemini
+$GeminiSrc = "$RepoRoot\gemini"
+$GeminiDest = "$UserHome\.gemini"
+if (Test-Path $GeminiSrc) {
+    Write-Host "Syncing .gemini..." -ForegroundColor Cyan
+    New-Item -ItemType Directory -Force -Path $GeminiDest | Out-Null
+    Copy-Item -Path "$GeminiSrc\*" -Destination $GeminiDest -Recurse -Force
+}
+
 Write-Host "Installation Complete! Skills are now available globally." -ForegroundColor Green
 Write-Host "Restart your IDE/Agent to pick up changes."

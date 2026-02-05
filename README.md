@@ -1,11 +1,12 @@
 # Agent Skills Repository
 
-This repository contains my global *Skills* and *Workflows* for AI agents (Antigravity, OpenCode).
+This repository contains my global *Skills* and *Workflows* for AI agents (Antigravity, OpenCode, Gemini).
 
 ## Structure
 
 *   `agent/`: Configuration for Antigravity (`.agent`).
 *   `opencode/`: Configuration for OpenCode (`.opencode`).
+*   `gemini/`: Configuration for Gemini Agents (`.gemini`), including `GEMINI.md` (System Prompt) and `settings.json`.
 
 ## Installation
 
